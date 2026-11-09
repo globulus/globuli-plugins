@@ -10,6 +10,14 @@ them here. Everything below is a command any of them can run; the MCP tools are 
 shorter way where the CLI has them. Told "use Globuli" and what to do: start at the
 loop, do that, and keep the loop going until it is done.
 
+**Told only "use Globuli", or to show where a project stands (D-638):** steps 1 and 2
+of the loop, then say where it stands and what waits, and ask what to do. Change
+nothing until the person says what: no answer, PR comment, merge, conflict resolved,
+plan, pause, resume, canary or note. Their word on an item, or "handle what waits", is
+the go-ahead; from then the loop runs for it. On 2026-11-09 a contributor's first
+session, opened by setup with "Use Globuli.", posted an `/answer` on a notes PR, tried
+to answer an escalation and resolved a merge conflict before the person had said a word.
+
 For the session that runs Globuli for the maintainer. A subagent, or a session asked
 only to change Globuli, does not operate it: in Globuli's source checkout, `CLAUDE.md`'s
 hard rules stand for those (the maintainer's checkout only).
@@ -49,7 +57,8 @@ asks the maintainer.
 1. `globuli_brief`: where things stand and what needs doing. Every session starts here.
 2. `globuli_attention`: everything that waits for the maintainer, each with what was
    asked, its options and the exact command for each (`limit`, `offset` to page).
-3. Handle each item (below). First what holds a slot or the release's critical path.
+3. Once told to (above), handle each item (below). First what holds a slot or the
+   release's critical path.
    Read with the tools (list below), not with `sqlite3`, `gh api` or the run folders.
 4. `globuli brief --mark --project $GLOBULI_PROJECT` once you have dealt with what it
    showed: the next brief lists the alerts since.
