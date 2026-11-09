@@ -1,0 +1,16 @@
+{
+  "description": "Globuli (D-593): which project this folder drives, and its roots for the session's shell commands",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/sh \"${CLAUDE_PLUGIN_ROOT}/scripts/globuli.sh\" session-start",
+            "timeout": 20
+          }
+        ]
+      }
+    ]
+  }
+}

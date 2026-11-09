@@ -1,0 +1,17 @@
+{
+  "name": "globuli",
+  "version": "0.5.0",
+  "description": "Drive Globuli from a project's own folder: the operating skills, Globuli's MCP server and a SessionStart hook that says which project the folder drives (D-593). Needs globuli on the PATH.",
+  "author": {
+    "name": "globulus"
+  },
+  "mcpServers": {
+    "globuli": {
+      "command": "/bin/sh",
+      "args": [
+        "${CLAUDE_PLUGIN_ROOT}/scripts/globuli.sh",
+        "mcp"
+      ]
+    }
+  }
+}
