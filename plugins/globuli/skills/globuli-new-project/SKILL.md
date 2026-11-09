@@ -84,9 +84,11 @@ project stands.
   Globuli acts as the person's own `gh` login (`gh auth login --web`): `github.bot` is
   done when that login can push to every repo, its own repos usually. A second account
   for the bot stays the alternative, for a person who wants Globuli's comments apart.
-- **Other engineers (D-631).** `github.maintainer` is the one Globuli asks and mentions;
-  another engineer whose PR commands should count goes in `github.maintainers: [<login>, …]`
-  (the primary in it or not): they act through GitHub, they are not paged.
+- **Other engineers (D-631, D-643).** `github.maintainer` is the one Globuli asks and mentions;
+  another engineer gets one role in `github.roles`: `operators: [<login>, …]` do everything
+  (as `github.maintainers` do), `builders: […]` answer and pause or resume one item,
+  `viewers: […]` read. They are not paged. Put `roles` into `main` only once every machine
+  of the project runs a Globuli with D-643: an older one refuses the key.
 
 ## Local models (D-544)
 
