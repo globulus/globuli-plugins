@@ -31,6 +31,14 @@ root: nothing of the source tree is needed. `globuli-change` and `globuli-postmo
 skills of Globuli's source checkout: from an install, a defect of Globuli is an
 observation (below), and changing Globuli is the maintainer's.
 
+On a contributor's machine the project is joined (D-630, `globuli project join`): it runs
+on the maintainer's machine, and the read tools (`globuli_brief`, `globuli_attention`,
+`globuli_item`, `globuli_why`, …) come through the hub, read-only. They act on nothing,
+and no `globuli` command acts on a joined project from here: answers, pauses, plans and
+approvals are the maintainer's, on the machine that runs it. A tool that says the hub
+refused the token (401) or the machine did not answer (503, 504): tell the person, who
+asks the maintainer.
+
 ## The loop
 
 0. Start watching: `globuli watch --follow --project $GLOBULI_PROJECT` under a tool that
@@ -288,6 +296,29 @@ until brownfield is merged into it: there, the machine's item is the only one.
   merge. If the output names a work item already planned for it, tell the maintainer:
   they `/abandon` it on its PR if the PR replaces it (IvERP #134 and WI-0112 fixed one
   stale test twice on 2026-10-15).
+
+## Giving Globuli notes (D-634)
+
+Told "here are my notes for the next build" (pasted, a file, a link): they go into
+the knowledge repo as a note, on a notes PR; Stage 1 makes requirements of them.
+1. `git fetch` the knowledge repo; a branch `notes/<topic>` from its `main`, in a
+   worktree of your own, never in Globuli's clones.
+2. One file `inputs/NOTE-<YYYYMMDD>-<topic>.md`, as the knowledge repo's
+   `templates/note.md` has it: its front matter (`date`, `type`: visit, call, email,
+   document or transcript, `language`, `client_people`, `our_people`, `corrects`),
+   then the notes in the person's own words. Don't rewrite them into requirements:
+   that is Stage 1's synthesizer's. Images and files in
+   `inputs/attachments/<note ID>/`; a link stays a link (for a PRD, the link is
+   the source, `Scope from its source` above).
+3. Commit (`docs(notes): …`), push, and open the PR with the person's own `gh`
+   login: Stage 1 skips a PR by Globuli's own account (the project's
+   `accounts.github.login`, or the bot).
+4. Say the PR's link; Stage 1's critic and synthesizer run on it, and a
+   maintainer merges it (`/merge-when-ready` to merge once Stage 1 marks it
+   ready). Planning takes the requirements it makes ready.
+
+On a contributor's machine (a joined project, D-632) it is the same; they need push
+access to the knowledge repo.
 
 ## Telling the maintainer
 

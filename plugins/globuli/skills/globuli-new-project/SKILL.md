@@ -9,6 +9,13 @@ For the maintainer's session. Globuli's step runner (D-420, `globuli docs brownf
 "15. The step runner"`) knows the steps, checks each against real state and does the ones it can.
 You do the talking, the judging and the editing. The person decides.
 
+Joining a project that already runs, on someone else's machine (another engineer on
+the same project), is not this skill: it is `globuli setup` at a terminal, answering
+`join` (D-632). That clones the project's repo, says what to ask the maintainer for,
+keeps the hub's token and runs `globuli project join`, with no daemon, no service and
+no agent token on the joiner's machine; then the globuli-operate skill shows where the
+project stands.
+
 ## The loop
 
 0. A bare machine: `globuli setup` says what it needs, in order (D-413). On a new
@@ -77,6 +84,9 @@ You do the talking, the judging and the editing. The person decides.
   Globuli acts as the person's own `gh` login (`gh auth login --web`): `github.bot` is
   done when that login can push to every repo, its own repos usually. A second account
   for the bot stays the alternative, for a person who wants Globuli's comments apart.
+- **Other engineers (D-631).** `github.maintainer` is the one Globuli asks and mentions;
+  another engineer whose PR commands should count goes in `github.maintainers: [<login>, …]`
+  (the primary in it or not): they act through GitHub, they are not paged.
 
 ## Local models (D-544)
 
