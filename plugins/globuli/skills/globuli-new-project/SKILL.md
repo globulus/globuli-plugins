@@ -11,7 +11,11 @@ You do the talking, the judging and the editing. The person decides.
 
 ## The loop
 
-0. A bare machine: `globuli setup` says what it needs, in order (D-413). An install
+0. A bare machine: `globuli setup` says what it needs, in order (D-413). On a new
+   person's Mac, `curl -fsSL https://theglobulus.com/install | sh` installs Globuli and
+   starts `globuli setup` guided (D-624, D-625): it stores the Claude token and signs
+   gh in through their own commands, so nobody pastes a credential into a chat or
+   types `security` by hand; Slack's webhooks are optional (D-626). An install
    carries its own Node, so there is nothing to bootstrap; a source checkout of Globuli
    without its dependencies (no `globuli_*` tool because the MCP server died) is
    bootstrapped first, as `globuli steps` says at `machine.globuli` (D-511). In a source
@@ -21,7 +25,8 @@ You do the talking, the judging and the editing. The person decides.
    `globuli daemon start`, which gives it those roots. For a rerun of a release,
    `github.copies` brings the client's copies to their upstream first. Ask the
    maintainer for their Slack member ID before the daemon starts (`notify.maintainer-id`,
-   D-512): without it every alert that waits for them posts unmentioned.
+   D-512): without it every alert that waits for them posts unmentioned. Without the
+   alerts webhook the step is done: no Slack, nobody to mention (D-626).
 1. Call `globuli_steps` with `next: true` (or `globuli steps next --project <file>`).
    Before `globuli.yaml` exists, use the CLI with the path it will have.
 2. Read who acts:
@@ -68,6 +73,10 @@ You do the talking, the judging and the editing. The person decides.
 - **No secret** in a step's input, in the session, or in `<state root>/steps/`.
 - The daemon never runs a step; the CLI runs in the maintainer's shell, on their `gh`
   login, and the bot's actions use its token from the Keychain.
+- **No bot account is needed (D-627).** Without the item `globuli.github-bot-token`,
+  Globuli acts as the person's own `gh` login (`gh auth login --web`): `github.bot` is
+  done when that login can push to every repo, its own repos usually. A second account
+  for the bot stays the alternative, for a person who wants Globuli's comments apart.
 
 ## Local models (D-544)
 
