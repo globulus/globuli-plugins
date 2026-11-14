@@ -7,7 +7,7 @@
       "name": "globuli",
       "source": "./plugins/globuli",
       "description": "Drive Globuli from a project's own folder: the operating skills, Globuli's MCP server and a SessionStart hook (D-593). Needs globuli on the PATH: brew install globulus/globuli/globuli.",
-      "version": "0.5.33"
+      "version": "0.5.34"
     }
   ]
 }
