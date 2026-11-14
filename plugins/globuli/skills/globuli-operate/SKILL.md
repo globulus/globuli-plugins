@@ -64,7 +64,10 @@ asks the maintainer.
    showed: the next brief lists the alerts since.
 5. Leave what the next session must know and Globuli cannot derive (a decision and its
    reason, a promise, a thing to watch): `globuli note add "<text>" --link <ID>`, and
-   `globuli note done <MN-…>` for one that is settled. Never the state: the brief has it.
+   `globuli note done <MN-…|SN-…>` for one that is settled. Never the state: the brief has it.
+   On a shared store the note goes into the store and every machine's brief shows it;
+   for another machine only, add `--for <machine>` (its name as `globuli machines` shows
+   it): only that machine's brief shows it (D-717).
 
 Without the tools: `globuli brief --project $GLOBULI_PROJECT` and `globuli status
 --project $GLOBULI_PROJECT` say the same on the command line; `globuli note list`.
