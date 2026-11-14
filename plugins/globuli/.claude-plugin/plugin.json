@@ -1,6 +1,6 @@
 {
   "name": "globuli",
-  "version": "0.5.29",
+  "version": "0.5.30",
   "description": "Drive Globuli from a project's own folder: the operating skills, Globuli's MCP server and a SessionStart hook that says which project the folder drives (D-593). Needs globuli on the PATH.",
   "author": {
     "name": "globulus"
