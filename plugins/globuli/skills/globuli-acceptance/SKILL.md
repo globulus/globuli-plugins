@@ -103,6 +103,13 @@ tester whose results judge every criterion of its group is done however its run 
 (D-215). One that writes no results runs once more; then its group fails and the
 report says so. Keep the machine quiet meanwhile. Started early, they get what the
 maintainer leaves unpassed or noted since once "Done testing" comes (D-265).
+`acceptance.max_criteria_per_tester` caps a group's criteria (D-720): more groups than
+`max_testers` where needed, those past `concurrency.acceptance_testers` (3) queued; the
+event that starts them says the groups and their sizes. Without it a group can be too big
+to finish: Doodle's acceptance-9.1.0-r6 gave one tester 245 and it left 126 blocked.
+With `acceptance.decided_differences: true` each group also gets `decided.md` beside its
+results, the decisions and plan lines that allow a difference for its criteria; a
+difference one of them allows is no failure (D-721).
 
 **When the testers report, read each group's line** (`globuli_why <round>`): what it
 passed, partly passed, failed and blocked, and why. A group whose results block every

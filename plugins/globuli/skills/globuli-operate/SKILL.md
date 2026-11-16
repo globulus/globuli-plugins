@@ -107,7 +107,15 @@ and the run's report first, and check a claim in the code or the data before wri
   the step that stopped. Examples by kind: `globuli docs answers` (one of them: `globuli docs answers <name>`).
 - **A plan fact goes into the plan:** an answer that settles one (a value, a rule, what a
   criterion means) is given with `--into-plan` (D-476), which commits it into the plan
-  first, so the reviewers and Feature QA read it too.
+  first, so the reviewers and Feature QA read it too. It writes into the plan of the item the
+  escalation names. In a batch (`B-NNNN`, several items built on the leader's branch),
+  that is the leader, which may not own the criterion. First read which item's
+  `Covers` names the criterion (`globuli_item`). When it isn't the escalated item,
+  commit the fact into that item's `specs/WI-NNNN/plan.md` on the batch's branch
+  yourself (`docs(plan): …`), and answer naming the commit (D-679). On 2026-11-12
+  ESC-0034's answer went into WI-0046's plan, but `FR-0073.AC-3` was WI-0080's, in
+  the same batch B-0005. Feature QA failed it again twice (ESC-0035, ESC-0036) before
+  the fact reached WI-0080's plan.
 - **An answer reaches only the runs of the step the item continues with** (D-254), never
   a later reviewer or Feature QA, nor the coder's merge run that may come first (its
   own question's answer goes to it alone). Where no agent's step is next (`planned`,
@@ -146,6 +154,15 @@ and the run's report first, and check a claim in the code or the data before wri
   PR) as decided on the maintainer's behalf. They do not want to decide a small thing
   twice. Their scope wording is scope, never a data-model rule: tables a feature plainly
   needs come with it.
+  **Not minor (D-725):** a decision that keeps a part the client sees as the product's
+  old code, where the client's prototype or design shows it otherwise. Compare that
+  part with the prototype first (the served prototype at its pin, the screen, the
+  component), and bring it to the maintainer with what differs. On 2026-11-13 the
+  driver, settling a Stage 1 critic finding on notes PR #305 for him, wrote DEC-0195:
+  the shared create panel stays web-phoenix's. No planner ported the prototype's
+  Meeting panel from then on, and Feature QA measured it on 2026-11-15 (WI-0147:
+  0.168 against the 0.005 gate). It cost a decision (DEC-0235), a notes PR that paused
+  two items and a new item at the end of 9.1.0.
 - **An open product question is settled when you find it** (D-453): a criterion no plan
   covers, a plan that says other than its requirement, a point a reviewer or critic
   leaves to the maintainer. A minor one goes into the plan on the item's branch at once,
@@ -154,6 +171,25 @@ and the run's report first, and check a claim in the code or the data before wri
   session, and it comes back as Feature QA's escalation on the critical path. One that
   truly can't be settled now is a `globuli note add "<text>" --link WI-NNNN`, which the
   brief shows each time, never a line in the session's own summary.
+- **Part of an item handed to an item not planned yet (D-730).** When an answer gives
+  part of an item's criteria to a new item (a decision that a later item builds it),
+  pause the item (`globuli pause WI-NNNN`) until the planning that makes the new item
+  has made it, then resume: Feature QA leaves that part to the new item (D-710), which
+  it can only do once the item exists. Without the pause its Feature QA runs and fails
+  the same finding again. On 2026-11-15 ESC-0072 gave WI-0147's Meeting panel to a new
+  item at 17:43Z; Feature QA ran at 17:47Z and failed F-01 again ($3.88), as no item
+  existed to leave it to.
+- **A gap in the QA stack's seed or stand-in is fixed at once (D-738).** When Feature
+  QA's escalation or a planner's question says the stack's data or a stand-in can't
+  match (the seed's rows, days or replies, the calendar stand-in's behaviour), no work
+  item can fix it: `stack/` is the knowledge repo's. Fix `stack/` yourself, in a
+  worktree of the knowledge repo, by a PR from Globuli's own account (Stage 1 skips it),
+  merge it once its checks pass, and answer naming the commit. Never park it for a later
+  seed fix. Where the gap is a difference to accept instead, decide it on the
+  maintainer's behalf in the plan, or ask him when it is client-visible (D-725). On
+  2026-11-14 and 15 such gaps came back as ESC-0044, ESC-0073 and plan-20261115T112159Z's
+  questions, and the weekend-day seed gap of ESC-0073 was left for "a later seed fix".
+  Making the seed plannable work is on the watchlist (W-041).
 - Review rounds used up on Critical or High findings: a real bug gets the exact fix
   in the answer, a false finding the proof. The same failure on several items, or a
   refusal the role should allow, is a defect in Globuli: `globuli-recover`, then
@@ -329,6 +365,38 @@ the knowledge repo as a note, on a notes PR; Stage 1 makes requirements of them.
    maintainer merges it (`/merge-when-ready` to merge once Stage 1 marks it
    ready). Planning takes the requirements it makes ready.
 
+**Not while a release builds, unless the note is meant to change it (D-677).**
+Stage 1's synthesizer may edit requirements from any note, a `globuli intake`
+document too. A notes PR that changes a requirement is a change proposal: every work
+item covering that requirement is paused until the PR is merged or closed. It can
+also block on another release's open questions. Reference material, such as a
+client's engineering docs, playbooks or conventions, is no requirement change. Put it
+in as repo rules or decisions by a knowledge PR in Globuli's own account, which
+Stage 1 skips, or file it as a note once the release has built. Before filing a note
+during a build, ask which requirements it could touch, and say so to the maintainer.
+For one filed anyway, watch its first synthesis (`globuli_notes`, the
+`change-proposal` alert). Close it at once when it pauses an item on the critical
+path, and tell the maintainer. Incident: 2026-11-11 22:13Z, the driver filed
+Doodle's Slite engineering digest by `globuli intake` as notes#294 while 9.1.0's web
+chain built. By 22:35Z its synthesis had changed FR-0001, FR-0026 and FR-0076 and
+paused WI-0026, WI-0027, WI-0035 and WI-0046, the head of the critical path, as the
+maintainer left for the night. It was closed at 22:36Z, and the items moved again
+at 22:37Z.
+
+**A knowledge PR that is no note goes out from Globuli's own account.** That covers
+the stack kit (`stack/`), `globuli.yaml`, standards and repo rules. Open it as the
+project's `accounts.github.login` (Doodle's is `gordan-glavas-codecons`), never as the
+maintainer's own login, whatever it holds and whether or not a release builds. Stage 1
+reads every PR of the maintainer's login as a note, and its synthesis may edit
+requirements from what it finds there. Name the login with `GH_TOKEN=$(gh auth token
+--user <login>) gh pr create …`. Incident: 2026-11-13 23:18Z, the driver opened
+Doodle's QA seed of the prototype's demo data (`stack/`, a persona hint) as globulus,
+doodle-knowledge#306, while 9.1.0's UI items built overnight. By 23:36Z its synthesis
+had edited FR-0093, FR-0094, FR-0095, FR-0098 and FR-0100, blocked on three
+questions, and paused WI-0119 to WI-0128, four of them in the batch on the critical
+path. It was closed at 23:40Z, and the seed came back alone as #307 from the
+project's account.
+
 On a contributor's machine (a joined project, D-632) it is the same; they need push
 access to the knowledge repo.
 
@@ -339,6 +407,43 @@ access to the knowledge repo.
   `globuli notify --mention "<text>"`.
   Say exactly what to do and when ("merge IvERP-knowledge#7 now: Stage 1 marked it
   ready"). Globuli's own alerts that wait for them carry the mention (D-200): repeat none.
+- **Everything built for Globuli stays in front of the maintainer until it is live and
+  released, or dropped** (D-687). Every status reply ends with a "Built, not live yet"
+  list, one line each, until the list is empty: the PR (a full link), and what it waits
+  for and from whom. For example: "conflicts, mine to fix"; "needs your canary approval";
+  "merged, waits for the go-live"; "live, waits for the release"; "released, waits for
+  your `globuli upgrade --target`". When the list is empty, say so in one line. Never keep
+  a built change only on your own follow-up list or in a summary. Ask for what it
+  waits for at once (a canary approval, a merge), with a Slack mention, and again at
+  the next status reply. Incident: D-675 (globulus/Globuli#751, a repo's pinned Node)
+  was built on 2026-11-11 at 21:13Z and held back for a canary nobody asked the
+  maintainer to approve. It sat on the driver's follow-up list for 20 hours and went
+  conflicting, while web-phoenix#2350 stayed open because of the missing pin. The
+  maintainer found it only by asking on 2026-11-12 at 17:30Z.
+- **Every Globuli go-live is followed by a release and the maintainer's target**
+  (D-687). Other machines on a shared store run only what is published, and a new
+  `globuli.yaml` key goes on once the release is out: a machine still on an older
+  Globuli claims no work until it upgrades (D-656), and no one waits for it. So after
+  each go-live, in the same turn:
+  1. Do every step of the release yourself (the maintainer's checkout only), the
+     maintainer runs none (the maintainer, 2026-11-12: "everything related to
+     publishing should be done automatically"):
+     `tools/release/release.sh <v> --worktree <dir>` (D-688; `--dry-run` first)
+     does them all: the tag, the bundle, the release, the plugin, the formula in
+     `globulus/homebrew-globuli` and `globuli upgrade --target <v>` for the project
+     the checkout drives. It skips what is done and can be run again after a
+     failure. Another project's target: `globuli upgrade --target <v> --project …
+     --state-root …` (`tools/release/README.md`).
+
+     If a permission prompt or the auto-mode classifier stops a step, don't work
+     around it and don't hand the maintainer the command. Ask once for an allow rule
+     for that command (the `update-config` skill), then run it.
+  2. Keep the release in the "Built, not live yet" list until `globuli upgrade
+     --target` shows every machine on it.
+  Several go-lives on one day may share a release, but none waits past the end of
+  the turn unasked. Incident: on 2026-11-12, D-685 and D-675 went live on the
+  maintainer's Mac at 17:22Z and 17:45Z. Neither was released until the maintainer
+  asked "do you need to publish the update?" at 17:55Z.
 - **Worth knowing, nothing to do:** one line to the digest channel (`globuli notify
   --digest "<text>"`), batched: one for a train, not one per PR. **Routine events** (a
   merge, a reload): nothing, the progress feed posts them.
@@ -370,6 +475,58 @@ access to the knowledge repo.
   the creation date, never the secret). When you can't tell, say so and recommend
   nothing. On 2026-11-06 a guess at a `keychain-duplicate` alert's two items got the
   newer, used one deleted.
+
+## Off-hours: the maintainer away (D-741)
+
+The maintainer hands the driver the night (or a trip) with a goal ("the round complete,
+its testers run, deployed to the devbox by morning") and an hour they are back. Until
+then the driver does everything the goal needs, and nothing it doesn't.
+
+**Before they leave, in one message, while they can still answer:**
+1. Name each way the goal can stop overnight (an account's limit, a red check, a
+   decision only they make, a permission prompt, a client's CI) and what you will do at
+   each. Ask in their words for what you can't do without them: the account to switch
+   to at a limit and a canary after it, cancelling planning sessions that only plan CI
+   cut-offs, merges on proof, deploys. A permission given by name stands for the night;
+   one not named is asked now, not at 3 a.m.
+2. Agree what waits for them, and say it back: by default a new acceptance round,
+   merging a round's bug notes PR, a change of scope, anything irreversible outside the
+   project's own repos.
+3. Record the authority, the goal, the end time and what waits in one shared note
+   (`globuli note add "<…>" --link <release>`), so any session that takes over reads it.
+4. Make the night run by itself: the machine kept awake (Claude Code desktop's
+   keep-awake, `until: session_idle`), the session's own usage and the agents'
+   accounts checked (`get_usage`, `globuli_usage`), both watchers armed (`--follow
+   --interval 60`, and `--until-event`), the nightly skipped if it would pause intake
+   during the round.
+5. Tell Globuli: `globuli off-hours --until <time> --project $GLOBULI_PROJECT` (D-749):
+   a round whose testers started at once then writes its report as soon as they have
+   all reported, and alerts go to Slack with no mention, for the morning. `globuli
+   off-hours --off` when they are back.
+
+**During the night:**
+- A decision a standing permission covers, or one that follows from a decision the
+  maintainer made, is made on their behalf at once, into the plan (`--into-plan`), with
+  its reason. One that follows from none: the option that keeps the goal moving and is
+  easiest to undo, recorded the same way. Never park one for the morning when the goal
+  needs it tonight.
+- A step Claude Code's permission check refuses: once more, quoting their words of the
+  handover; refused again, it waits, and the morning report lists it.
+- Every intervention gets its row in `docs/handoff/driver-interventions.md` as it
+  happens (the maintainer's checkout only).
+- Never start what they kept for themselves, even when Globuli offers it.
+
+**When they are back, before anything else, one report:**
+- Where the goal stands, against what was asked.
+- What was done: answers, merges, deploys, account switches, with times and IDs.
+- Every decision made on their behalf: what, why, and how to undo it.
+- What waits for them.
+- The night's interventions (their DI rows), as the postmortem's first material.
+
+Incident: 2026-11-15 the maintainer handed Doodle's 9.1.0 round 8 over for the night at
+22:56Z ("you have the authority to do everything needed"). The evening before had
+needed three permission prompts answered one at a time (planning cancels, a squash
+merge), each holding the line until the maintainer replied.
 
 ## Watching
 
@@ -423,11 +580,23 @@ At each wake, check that both still run before anything else. On 2026-10-28 Dood
 build started with neither: one watcher of WI-0001's coder run alone, which ended
 when the item went to review.
 
+**Before every turn ends, too (D-709).** The end of a piece of work (a change to
+Globuli built and released, an answer, a merge, a report) is not the end of the
+watch. Before the last message of every turn, check that both watchers run, and
+re-arm the one that doesn't; say in that message that they do. Where the maintainer
+handed the session a client's upstream PRs to merge (`upstream_review`), also list
+the open PRs into the upstream trunk of each repo (`gh pr list --base <trunk> --state
+open`) and leave each one that waits for its checks with a merge of its own armed,
+or say why it waits. On 2026-11-14 the driver ended its turn after the ETA fix
+(D-705, D-706) with neither watcher armed: ESC-0045, on 9.1.0's critical path,
+waited unanswered, and svc-time-flow #30 to #33 waited unmerged (#30 mergeable since
+09:40Z), until the maintainer asked why nobody was watching.
+
 **A `WASTE` line** is an agent's run that is going to waste, or a step that will pay
 for one again: a step postponed or failed, the commit check reverting a run's paths,
-a live run with a subagent started in the background (it ends the agent's turn,
-D-432), or a live run whose transcript hasn't grown for 20 minutes. Act before the
-retry is due:
+an acceptance tester group's run that ended with no results (D-682), a live run with
+a subagent started in the background (it ends the agent's turn, D-432), or a live run
+whose transcript hasn't grown for 20 minutes. Act before the retry is due:
 - a step that failed after a long run passed: `globuli pause` at once, then read
   what the retry would do (the step's code) before resuming;
 - a run on code with a fault already fixed (a reload pending, the run showing the
@@ -435,6 +604,10 @@ retry is due:
   Only for a daemon that is this session's to run;
 - a quiet run: read its transcript's end (a long build or test run is fine);
 - a reverted path: check what the run's next turn does without it.
+- a tester group's run with no results: its line has the reason (a run that never
+  started has no run record). One that will fail the same way again (an app that does
+  not build) is the maintainer's to hear now; once it is fixed, `globuli acceptance
+  <release> --retest <group>` while the testers still retest.
 - an alert that a run's evidence was not archived (`compliance.retention`, D-547): run
   `globuli doctor` (is the store reachable, how much waits) and tell the maintainer; the
   local copies stay and each housekeeping round tries again.
@@ -457,6 +630,9 @@ Read the whole page before you publish it: the Artifact tool publishes nothing i
 has not seen. A page too large to read in full (round 3 of IvERP 0.4.0: 385 KB, about
 80k tokens of criteria, verdicts and bugs) is not published: give the maintainer its
 path and say why (D-612).
+Publish the round's `summary.html` beside it instead (D-735): the round, every bug and
+the testers' summaries on one small page, which can be read whole; give the full page's
+path with it.
 
 ## Dashboard
 
@@ -520,10 +696,22 @@ A `soup-vulnerability` alert names versions with known vulnerabilities no review
 - Work yourself: no subagents and no review agents unless the maintainer asks for them
   (their word on 2026-10-21 and 2026-10-23). Small Globuli changes are built here
   (`globuli-change`).
-- **A correction from the maintainer is a rule for every driving session** (D-612):
-  write it into this skill by a PR (`globuli-change`) the same day, with the date and
-  what went wrong, not only into your own session's memory, which no other session
-  or LLM reads.
+- **A mistake of yours is a rule for every driving session** (D-612; widened by D-678,
+  2026-11-11). It counts whether the maintainer corrects you or you find it yourself:
+  a watcher's line, an alert or a post-mortem finding that traces back to something you
+  did or didn't do. In this order, in the same turn:
+  1. contain it: undo, close or re-arm what it took;
+  2. tell the maintainer in one line what happened and what it cost;
+  3. open a PR (`globuli-change`) that changes this skill, or the role, doc or tool that
+     let it happen, with the rule that would have prevented it, its date and what went
+     wrong.
+
+  A rule for this skill alone is a docs change: it merges by the gate the same day, no
+  canary. Anything larger waits for the maintainer. Your own session's memory is not
+  enough: no other session or LLM reads it. A post-mortem's "driver's own mistakes"
+  names the PR each became. On 2026-11-11 the driver filed a notes PR that paused the
+  head of the critical path (D-677); the maintainer: "if it notices that it made a
+  mistake, it should become a proposal for the globuli driver agent".
 - **"Keep quiet"** (while the maintainer runs a canary, say) (D-612): first stop every
   background task of your own (watchers, trains, pre-checks), or ask once before
   going silent if one must keep running; confirm in one line; then reply to nothing
@@ -531,6 +719,91 @@ A `soup-vulnerability` alert names versions with known vulnerabilities no review
   open Claude Code session while the canary's hooks are planted can fail the canary:
   on 2026-11-05 three watchers ended during Doodle's canary and each reply went
   through.
+- **Additive and non-breaking** (2026-11-09; widened 2026-11-11): everything built for
+  Globuli keeps every existing install and project running as it did. New keys and
+  stored fields are optional; migrations are harmless to older readers; there are no
+  new checks without a new setting. Check what an older machine on the shared store does
+  with it: a new `globuli.yaml` key makes an older Globuli claim no work until it
+  upgrades to the release target (D-656), and the others go on, so the key reaches a
+  project's main once the release is published and the leading machine runs it, never
+  waiting for one engineer's machine (the maintainer, 2026-11-16). When a change truly can't be non-breaking, bring it to the maintainer
+  before building or merging it. The same rule is in `CLAUDE.md` (the maintainer's
+  checkout only).
+- **Never bring back a decided blocker** (2026-11-11): before you name a blocker,
+  check that the maintainer hasn't already decided it away: a setting
+  (`upstream_review.ci.ignore`), an answer, a note. The driver raised svc-time-flow's
+  failed SonarCloud gates again after the maintainer had said to ignore SonarCloud:
+  "ignore sonarcloud, I told you that".
+- **Build against a known shape; don't wait for it** (2026-11-11). When work only
+  waits for something whose shape is known (a backend built but not deployed, a schema
+  we wrote), build against it now, within the client's conventions, and switch over
+  when the real thing lands. Offer "wait for X" only when what would be built truly
+  depends on facts nobody has. The driver proposed deploying svc-time-flow before
+  building TimeFlow's web; the maintainer: "why do we wait all the time for something
+  that we absolutely know what it would look like".
+- **Whose item it is comes from the record** (2026-11-11): read the item's `machine:`
+  line (`globuli_item`) and who asked for it before you name its owner. The driver
+  called WI-0090, the maintainer's own BL-0894 fix, Celia's.
+- **A background agent of yours is checked at each wake** (2026-11-11). When it
+  should have reported and hasn't, look at what it left: its files and its last
+  output. One that stopped halfway is restarted or reported, never left. Doodle's
+  Slite digest agent stopped halfway on 2026-11-11, and nobody noticed for hours.
+- **No silent scope cuts** (2026-11-03): when the maintainer decides something whole,
+  never leave part of it out because something is missing (an account, a URL, an
+  endpoint). Stop and ask, naming what blocks it. A note in a PR body is not asking:
+  doodle-knowledge#254 left the upstream PRs and the upgrade out that way, and a
+  contract merged with no human.
+- **A pause the maintainer asks for is `globuli pause --now`** (2026-11-03): plain
+  `pause` lets running agents finish and spend tokens on work that may be thrown away
+  (WI-0025's coder kept running). If you leave a run on purpose, say so.
+- **No guess beside a destructive step** (2026-11-06): before suggesting a delete or
+  an overwrite, establish which item is which from facts you can read (dates,
+  accounts, what reads it), and say plainly when you can't. For a Keychain item, read
+  its metadata without `-w` (acct, cdat). On 2026-11-06 a guess about two
+  `globuli.claude-oauth-token` items had the newer one deleted.
+- **Re-read requirements from their source** (2026-11-06): asked to re-read the PRD
+  or the designs, fetch the current source through its link in the knowledge repo's
+  `inputs/` notes, compare its date with the repo's snapshot, and say which version
+  a statement rests on. A re-plan of Doodle 9.1.0 from the stale `prd/` snapshot
+  left out the mobile app.
+- **A step delegated for the night gets done** (2026-11-06): before the maintainer
+  leaves, name every way it can still stop (a gate, a head that moves, a hook) and
+  get what would clear it while they are awake. Don't recommend an option you expect
+  to fail. A notes PR waited all night on an approval that went stale.
+- **A night handed to you includes its merges** (2026-11-14). "Take care of
+  everything" or "handle building" is the maintainer's go for every merge the night's
+  build needs, in a repository of this machine's own logins: a knowledge PR (the stack
+  kit, a config PR, a notes PR) or the product copy's. Merge it yourself and say so.
+  gh-guard lets such a merge pass (D-703); Globuli's own repositories and a client's
+  stay gated. Before the maintainer leaves, list the merges the night may need, and
+  get the allow rules for any command the auto-mode classifier stops (a
+  `/merge-when-ready` comment, a merge): only the maintainer adds permission rules.
+  Incident: on 2026-11-13 the driver built the QA seed the UI items needed
+  (doodle-knowledge#307) at 00:20Z, stopped at gh-guard and the classifier, and left
+  the merge to the morning. Batch B-0007's Feature QA ran without it, escalated
+  (ESC-0043), and the night was lost. The maintainer: "Why haven't you done it
+  yourself, I told you to take care of everything?"
+- **Check before offering a merge** (2026-11-07): before asking the maintainer to
+  merge a PR, check its mergeable state and checks on GitHub (`gh pr view --json
+  mergeable,mergeStateStatus,statusCheckRollup`); resolve conflicts and rerun the
+  checks yourself; recheck every PR you called clean after each merge you make.
+  GitHub's state decides, not `git merge-tree`.
+- **Each engineer's items belong to their own machine** (2026-11-11): on a shared
+  store several people work on the project at once, each from their own Mac. A work
+  item belongs to the machine of whoever asked for it (D-671). No other machine runs
+  it, and nothing moves it to "unblock" things. When its machine is down, behind or
+  can't start agents, the item waits and that machine's owner is told (D-670). The
+  same holds for a person's notes PR's Stage 1 and a release's planning, release
+  checks and rounds: they run on the machine that asked, and wait for it (D-696). Never
+  unpause, move or run another person's item on the maintainer's Mac, and never
+  describe the project as running "on" one Mac. On 2026-11-11 WI-0090, the
+  maintainer's own fix, waited 10 h on Celia's Mac, given to it while it upgraded
+  itself: "her items are her items, her work is hers, mine is mine, just on the same
+  project".
+- **A PR link means "act now"** (2026-11-08): give a link only with the action
+  ("merge X now"). A notes PR still in Stage 1 is named without a link, or with
+  "don't merge yet" up front: IvERP-knowledge#21 was merged three minutes after a
+  link, before Stage 1 read it.
 - Check your own usage (`get_usage`) at each wake. At 95% of the weekly limit, write a
   handoff, `docs/handoff/<date>-maintainer-handoff.md`, in the shape of the one of
   2026-10-23, so that a session on another subscription can take over (the maintainer's

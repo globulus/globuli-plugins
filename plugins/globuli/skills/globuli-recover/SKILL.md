@@ -61,10 +61,10 @@ checkout's skills: a defect of Globuli you find goes on record as an observation
 - **`stuck`** (a working state for three hours, nothing running or scheduled):
   `globuli advance <WI> --project $GLOBULI_PROJECT`. **`long-run`:** let it finish
   unless it plainly hangs; stopping a run is for the maintainer to decide.
-- **A planning session** that waits, is blocked on questions nobody will answer, or
-  was left running with no job: `globuli plan --cancel <session> --project
-  $GLOBULI_PROJECT` (D-226). Its question files stay open in the knowledge repo: set
-  each to `status: obsolete` in a notes PR.
+- **A planning session** that waits, is blocked on questions nobody will answer,
+  was left running with no job, or failed and is moot: `globuli plan --cancel
+  <session> --project $GLOBULI_PROJECT` (D-226, D-676). Its question files stay open
+  in the knowledge repo: set each to `status: obsolete` in a notes PR.
 - **A ready requirement nothing plans** is reported once, in an `escalation` alert:
   `globuli plan <requirement>… --project $GLOBULI_PROJECT`.
 - **A red release check** plans its own fix (D-175): act only when one could not run.
