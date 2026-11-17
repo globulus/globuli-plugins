@@ -105,6 +105,10 @@ and the run's report first, and check a claim in the code or the data before wri
   (or `--text "<text>"`): at once, and the PR gets the text. `/answer <text>` as the
   first line of a comment on the PR does the same at the next poll. The item resumes at
   the step that stopped. Examples by kind: `globuli docs answers` (one of them: `globuli docs answers <name>`).
+- **A decision of the maintainer's on what an item builds** goes in with `/decide <text>` on
+  its PR or `globuli decide <WI> --file <path> --project $GLOBULI_PROJECT` (D-757), not a
+  notes PR first: the item is re-planned on it at once, and Globuli opens the notes PR itself,
+  which doesn't hold the item. WI-0166's notes PR first took 85 minutes to its plan.
 - **A plan fact goes into the plan:** an answer that settles one (a value, a rule, what a
   criterion means) is given with `--into-plan` (D-476), which commits it into the plan
   first, so the reviewers and Feature QA read it too. It writes into the plan of the item the
